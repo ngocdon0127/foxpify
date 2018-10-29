@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Wheel of Fortune Bingo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="wheel.ico"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+    text{
+        font-family:Helvetica, Arial, sans-serif;
+        font-size:11px;
+        pointer-events:none;
+    }
+    #chart{
+      /*  position:absolute;*/
+      margin: 0 auto;
+        width:500px;
+        height:500px;
+        top:0;
+        left:0;
+    }
+    #question{
+        position: absolute;
+        width:400px;
+        height:500px;
+        top:0;
+        left:520px;
+    }
+    #question h1{
+        font-size: 50px;
+        font-weight: bold;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        position: absolute;
+        padding: 0;
+        margin: 0;
+        top:50%;
+        -webkit-transform:translate(0,-50%);
+                transform:translate(0,-50%);
+    }
+    .textlabel{
+        font-weight: bold;
+        font-size: 30px;
+    }
+    /*.spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120px;
+        height: 120px;
+        margin:-60px 0 0 -60px;
+        -webkit-animation:spin 4s linear ;
+        -moz-animation:spin 4s linear ;
+        animation:spin 4s linear ;
+    }
+    @-moz-keyframes spin {
+        0% {-moz-transform: rotate(0deg);}
+        25%{ -moz-transform: rotate(720deg);}
+        50%{ -moz-transform: rotate(1080deg);}
+        100% { -moz-transform: rotate(1120deg); }
+     }
+    @-webkit-keyframes spin { 
+        0% {-webkit-transform: rotate(0deg);}
+        25%{ -webkit-transform: rotate(720deg);}
+        50%{ -webkit-transform: rotate(1080deg);}
+        100% { -webkit-transform: rotate(1120deg); }
+    }
+    @keyframes spin { 
+        0% {-webkit-transform: rotate(0deg); transform:rotate(0deg);}
+        15%{ -webkit-transform: rotate(720deg); transform:rotate(1800deg);}
+        20%{ -webkit-transform: rotate(1080deg);transform:rotate(2520deg);}
+        75%{ -webkit-transform: rotate(1080deg);transform:rotate(2880deg);}
+        
+        100% { -webkit-transform: rotate(2980deg); transform:rotate(2980deg);}
+    }
+    */
+    body{
+        background: #251217;
+        color: white;
+        font-family: Roboto, sans-serif
+    }
+    #policy > a  {
+        color: white;
+        font-weight: bold;
+    }
+    </style>
+    
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js'></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="svgmain" style="padding-top: 20px" >
+                <svg id="svgSpin" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 1322.2 1200">
+                </svg>
+            </div>
+        
+            <div style="padding-top: 20px" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div id="">
+                    <h1 id="">
+                        Win an exclusive prize!
+                    </h1>
+                    <p id="">
+                        Enter your full name and email to spin the wheel for a chance to win
+                    </p>
+                    <span id="">
+                        <input class="form-control" name="fullname" placeholder=" Fullname " tabindex="1" id="fullname" />
+                    </span>
+                    <br>
+                    <span id="">
+                        <input class="form-control" name="email" placeholder=" Email "  type="email" id="email" />
+                    </span>
+                    <br>
+                    <label id="">
+                        Consent
+                    </label>
+                    <div id="policy" class="" style="background-color: rgb(232, 146, 12); padding: 10px 15px; color: white">
+                        Detailed information on the processing of personal data can be found in the <a href="javascript:void(0)">privacy policy</a>. In addition, you will find them in the message confirming the subscription to the newsletter.
+                    </div>
+                    <br>
+                    <div id="">
+                        
+                        <label for="gdpr-checkbox" id="">
+                            By clicking the below button, You allow us to store your personal data and to use it to send you the newsletter
+                        </label>
+                    </div>
+                    <div id="">
+                        <button class="btn btn-block btn-default" id="btnSpin" onclick="spinHandler(this)">
+                            Try your win!
+                        </button>
+                    </div>
+                    <br>
+                    <!-- <div class="row">
+                        <div class="col-lg-6">
+                            <input type="number" step="2" value="10" id="noSlides" class="form-control" placeholder="Number of slides">
+                        </div>
+                        <div class="col-lg-4" style="margin-left: 20px">
+                            <button class="btn btn-block" style="background-color: #FFFAD5" onclick="redraw()">Draw</button>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+        var picked = 3;
+        var arrColor=['#671953','#360c40','#863594','#cd9ec8'];
+
+            //category20c()
+            //randomNumbers = getRandomNumbers();
+        //http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
+        var data = [
+                    {"label":"Dell LAPTOP",  "value":1,  "question":"What CSS property is used for specifying the area between the content and its border?"}, // padding
+                    {"label":"IMAC PRO",  "value":1,  "question":"What CSS property is used for changing the font?"}, //font-family
+                    {"label":"SUZUKI",  "value":1,  "question":"What CSS property is used for changing the color of text?"}, //color
+                    {"label":"HONDA",  "value":1,  "question":"What CSS property is used for changing the boldness of text?"}, //font-weight
+                    {"label":"FERRARI",  "value":1,  "question":"What CSS property is used for changing the size of text?"}, //font-size
+                    {"label":"APARTMENT",  "value":1,  "question":"What CSS property is used for changing the background color of a box?"}, //background-color
+                    {"label":"IPAD PRO",  "value":1,  "question":"Which word is used for specifying an HTML tag that is inside another tag?"}, //nesting
+                    {"label":"LAND",  "value":1,  "question":"Which side of the box is the third number in: margin:1px 1px 1px 1px; ?"}, //bottom
+                    {"label":"MOTOROLLA",  "value":1,  "question":"What are the fonts that don't have serifs at the ends of letters called?"}, //sans-serif
+                    {"label":"BMW", "value":1, "question":"With CSS selectors, what character prefix should one use to specify a class?"}, //period
+                    {"label":"RANGE ROVER", "value":1, "question":"With CSS selectors, what character prefix should one use to specify an ID?"}, //pound sign
+                    {"label":"FREE VISA", "value":1, "question":"In an HTML document, which tag holds all of the content people see?"}, //<body>
+                    {"label":"HOTEL TICKET", "value":1, "question":"In an HTML document, which tag indicates an unordered list?"}, //<ul>
+                    {"label":"PLANE", "value":1, "question":"In an HTML document, which tag indicates the most important heading of your document?"}, //<h1>
+                    {"label":"HOME", "value":1, "question":"What CSS property is used for specifying the area outside a box?"}, //margin
+                   
+        ];
+
+
+
+        var svgdrawing=function(id){
+
+            this.id=id;
+            var namespace='http://www.w3.org/2000/svg';
+            function rotate(cx, cy, x, y, angle) {
+                angle=360-angle;
+                //y' = y*cos(a) - x*sin(a)
+                //x' = y*sin(a) + x*cos(a)
+                var radians = (Math.PI / 180) * angle,
+                    cos = Math.cos(radians),
+                    sin = Math.sin(radians),
+                    nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+                    ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+                 
+                return [nx, ny];
+            }
+            function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+              var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
+
+              return {
+                x: centerX + (radius * Math.cos(angleInRadians)),
+                y: centerY + (radius * Math.sin(angleInRadians))
+              };
+            }
+
+            function describeArc(x, y, radius, startAngle, endAngle){
+
+                var start = polarToCartesian(x, y, radius, endAngle);
+                var end = polarToCartesian(x, y, radius, startAngle);
+
+                var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
+
+                var d = [
+                    "M", start.x, start.y, 
+                    "A", radius, radius, 0, arcSweep, 0, end.x, end.y,
+                    "L", x,y,
+                    "L", start.x, start.y
+                ].join(" ");
+
+                return d;       
+            }
+            function createEle(ele,option, events){
+                this.el=document.createElementNS(namespace,ele);
+                var aThis=this;
+
+                if(events){
+                    //"addEventListener" in d ? d.addEventListener(c, a) : "attachEvent" in d && d.attachEvent("on" + c, a)
+                    var checkevent="addEventListener" in window?"addEventListener":"attachEvent";
+                    for(var i in events){
+                        console.log('adding', i, 'to', this.el, 'using', checkevent);
+                        this.el[checkevent](i,events[i]);
+                    }
+                }
+
+                this.append=function(element,option,event){
+                    if(typeof(element)=='string'){
+                        var c1=new createEle(element,option);
+                        if(event){
+                            //"addEventListener" in d ? d.addEventListener(c, a) : "attachEvent" in d && d.attachEvent("on" + c, a)
+                            var checkevent="addEventListener" in window?"addEventListener":"attachEvent";
+                            for(var i in event){
+                                console.log('adding', i, 'to', c1, 'using', checkevent);
+                                c1.el[checkevent](i,event[i]);
+                            }
+                        }
+
+                        this.el.appendChild(c1.el);
+                    }
+                    else{
+                        if(event){
+                            //"addEventListener" in d ? d.addEventListener(c, a) : "attachEvent" in d && d.attachEvent("on" + c, a)
+                            var checkevent="addEventListener" in window?"addEventListener":"attachEvent";
+                            for(var i in event){
+                                console.log('adding', i, 'to', element, 'using', checkevent);
+                                element[checkevent](i,event[i]);
+                            }
+                        }
+                        this.el.appendChild(element);
+                    }
+
+                   return this;
+                };
+                this.text=function(text){
+                    this.el.innerHTML=text;
+                    return this;
+                };
+                this.style=function(option){
+                    for(var i in option){
+                        this.el.style[i]=option[i];
+                    }
+                    return this;
+                };
+                this.attr=function(attr,option){
+                    if(typeof(option)=='string'){
+                        this.el.setAttributeNS(null,attr,option);
+                    }
+                    if(typeof(attr)=='object'){
+                        for(var i in attr){
+                            this.el.setAttributeNS(null,i,attr[i]);
+                        }
+                    }
+                    return this;
+                };
+                this.ele=function(){
+                    return this.el;
+                }
+                if(option){
+                    for(var i in option){
+                        if(i==='style'){
+                            console.log(option[i]);
+                            console.log(this);
+                            this.style(option[i]);
+                        }else{
+                            this.el.setAttributeNS(null,i,option[i]);
+                        }
+                        
+                    }
+                }
+               
+                return this;
+            }
+
+            this.draw=function(data){
+               var xoy={x:600,y:600};
+               var len=data.length;
+               var ele= document.getElementById(this.id);
+               ele.innerHTML='';
+               //console.log(ele);
+               //ele.appendChild(createEle('path',{'d':'M611.1,38.6c-0.4-.6-0.3-1.5.1-2.8,1.4-4.7,2.3-9.5,3.4-14.2,2.5-11-1.5-17.5-12.3-20.1H595c-10.9,2.6-14.9,9.3-12.2,20.4,1.2,4.7,2.2,9.4,3.6,14.1,0.4,1.3.4,2.2-.1,2.7,4.8-.1,9.7-0.2,14.5-0.2C604.3,38.5,607.7,38.6,611.1,38.6,Z','fill':'white'}).ele());
+               var g=new createEle('g',{'id':'mainSpin','transformOrigin':'center center'}).style({'transform-origin':'600px 600px'});
+               
+               g.append('circle',{'cx':xoy.x,'cy':xoy.y,'r':562,'fill':'white'});
+               
+               data.forEach(function(element,index){
+                g.append('path',{'d':describeArc(xoy.x,xoy.y,526,index*(360/len),(index+1)*(360/len)),"fill": arrColor[index%4],'id':'path'+index})
+               
+                var xixs=rotate(xoy.x,xoy.y,xoy.x,57,index*(360/len));
+
+                g.append('path',{'d':'M611.1,40c-0.4-.6-0.3-1.5.1-2.8,1.4-4.7,2.3-9.5,3.4-14.2,2.5-11-1.5-17.5-12.3-20.1H595c-10.9,2.6-14.9,9.3-12.2,20.4,1.2,4.7,2.2,9.4,3.6,14.1,0.4,1.3.4,2.2-.1,2.7,4.8-.1,9.7-0.2,14.5-0.2C604.3,38.5,607.7,38.6,611.1,40Z','fill':'white','transform':'rotate('+index*(360/len)+')','style':{'transform-origin':'600px 600px'}});
+                
+                g.append('circle',{'cx':xixs[0],'cy':xixs[1],'r':10,'fill':'#c99ec9'})
+                
+                var text1=new createEle('text',{'id':'text'+index}).text(element.label).style({"font-weight":"bold", "font-size":"30px",'color':'#fff','fill':'white','transform':'translate(100 100)'});
+               g.append(new createEle('g').append(text1.el).el);
+               window.setTimeout(function(){
+                   try{
+                    var rect=document.getElementById('text'+index).getBBox();
+                   }catch(e){
+                        var rect=document.getElementById('text'+index).getBoundingClientRect();
+                   }
+                   
+                   var toado=rotate(xoy.x,xoy.y,617,130+rect.width,(index*360/len)+(180/len));
+                       
+                   text1.attr({'transform':'translate('+toado[0]+' '+toado[1]+') rotate('+(-90+((index*360/len)+(180/len)))+')','transformOrigin':'left center'});
+               },1000)
+
+            });
+
+
+            var shadow=new createEle('g',{'id':'shadow','transformOrigin':'center center'}).style({'transform-origin':'600px 600px'});
+               
+
+            g.append('circle',{'cx':xoy.x,'cy':xoy.y,'r':130,'fill':'white'});
+               //shadow circle small
+               shadow.append('path',{'d':'M735.6,590.8a122.94,122.94,0,0,0-23.8-59.5c0.6,1,1.3,2.1,1.9,3.1A135.93,135.93,0,0,1,729.6,582a99.48,99.48,0,0,1,1.1,18.1,130,130,0,0,1-17.1,63.8,14.17,14.17,0,0,0-.8,1.8,136.42,136.42,0,0,1-46.9,46.5c-20.1,11.3-41.7,17.5-64.9,17.6a129.54,129.54,0,0,1-106.7-54,135,135,0,0,0,46.9,45.7A133.18,133.18,0,0,0,607,738.6c23.2-.1,44.8-6.3,64.9-17.6a136.42,136.42,0,0,0,46.9-46.5,14.17,14.17,0,0,1,.8-1.8,130,130,0,0,0,17.1-63.8A99.48,99.48,0,0,0,735.6,590.8Z','style':{'opacity':'0.25'}});
+
+
+               var text=new createEle('text',{'text-anchor':'middle','transform':'translate(600 620)'}).text('SPIN').style({"color":"black","font-weight":"bold", "font-size":"50px"});
+               g.append(text.ele(), {}, {'click': function (e) {
+                   console.log('click');
+               }});
+               //svg top shadow
+               shadow.append('path',{'d':'M600.1,90c287.9,0,521.8,231,526.4,517.8,0-2.9.1-5.8,0.1-8.6,0-290.8-235.7-526.5-526.5-526.5S73.7,308.4,73.7,599.2c0,2.9,0,5.8.1,8.6C78.4,321,312.3,90,600.1,90Z','style':{'opacity':'0.25'}});
+               // svg.append('g').append('path').attr('d','M600.1,90c287.9,0,521.8,231,526.4,517.8,0-2.9.1-5.8,0.1-8.6,0-290.8-235.7-526.5-526.5-526.5S73.7,308.4,73.7,599.2c0,2.9,0,5.8.1,8.6C78.4,321,312.3,90,600.1,90Z').style({"opacity":"0.25"});
+            //svg bottom shadow
+             shadow.append('path',{'d':'M1091.1,325.8a560,560,0,0,1,70.6,273.1c0,310.6-251.8,562.4-562.4,562.4-208.8,0-391-113.8-488-282.7,93.9,179.8,282.2,302.5,499.1,302.5,310.8,0,562.7-252,562.7-562.7A559.9,559.9,0,0,0,1091.1,325.8Z','style':{'opacity':'0.3'}});
+            //svg.append('g').append('path').attr('d','M1091.1,325.8a560,560,0,0,1,70.6,273.1c0,310.6-251.8,562.4-562.4,562.4-208.8,0-391-113.8-488-282.7,93.9,179.8,282.2,302.5,499.1,302.5,310.8,0,562.7-252,562.7-562.7A559.9,559.9,0,0,0,1091.1,325.8Z').style({"opacity":"0.3"});
+
+            var point=new createEle('g',{'id':'point'});
+               //point map
+               point.append('path',{'d':'M1248.43,540.62a38,38,0,0,0-11.6,1.78c-3.43,1.1-95.26,31.09-98.48,32.19-2.26.75-4.87,1.85-4.87,4.67s2.68,4.25,5,5c12.83,4.32,99.44,32.26,102.39,32.8h0A38.6,38.6,0,1,0,1248.43,540.62Z','style':{'opacity':'0.25'}});
+               //point map
+               point.append('path',{'d':'M1243.9,532.39a38,38,0,0,0-11.6,1.78c-3.43,1.1-95.26,31.09-98.48,32.19-2.26.75-4.87,1.85-4.87,4.67s2.68,4.25,5,5c12.83,4.32,99.44,32.26,102.39,32.8h0A38.6,38.6,0,1,0,1243.9,532.39Z','fill':'green'});
+               //add circle in point map
+               point.append('circle',{'cx':'1243.38','cy':'569.86','r':'14.62','fill':'white'});
+
+            ele.appendChild(g.ele());
+            ele.appendChild(shadow.ele());
+            ele.appendChild(point.ele());
+               //svg.append('g').append('path').attr('d','M1243.9,532.39a38,38,0,0,0-11.6,1.78c-3.43,1.1-95.26,31.09-98.48,32.19-2.26.75-4.87,1.85-4.87,4.67s2.68,4.25,5,5c12.83,4.32,99.44,32.26,102.39,32.8h0A38.6,38.6,0,1,0,1243.9,532.39Z').style({"opacity":"","fill":'green'});
+
+               //svg.append('text').text('SPIN').attr("text-anchor", "middle").attr('transform','translate(600 620)').style({"color":"black","font-weight":"bold", "font-size":"50px"});
+              
+            };
+
+            this.spinToSlice = function(idx, callback) {
+                var angle = 360 / data.length * idx
+                this.spin(angle, callback)
+            };
+
+            this.spin=function(angle, callback){
+                console.log('spin invoked with angle', angle);
+                var animation=window.requestAnimationFrame||window.webkitRequestAnimationFrame|| window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame;
+                var start = null;
+                var element = document.getElementById('mainSpin');var i=0;
+                element.style.transform ='rotate(0deg)';
+                var oldAngle = 0;
+                
+                function step(timestamp) {
+                  var f = !start;
+                  if (!start) start = timestamp || new Date().getTime();
+                  var progress = timestamp - start;
+                  console.log(progress);
+                  if(progress<=3000)
+                  {
+                    angle1=Math.floor((progress)*108/300*2);
+                  }else if(progress<=5000){
+                    angle1=Math.floor((progress-3000)*72/200*1.5);
+                  }else {
+                    angle1=Math.floor((progress-5000)*(360+angle)/2000);
+                  }
+                  if (f) {
+                    oldAngle = angle1
+                  } else {
+                    console.log('diff', angle1 - oldAngle);
+                    oldAngle = angle1
+                  }
+                  console.log('angle', angle, 'angle1', angle1);
+                  if (progress <= 7000) {
+                    element.style.transform ='rotate('+(angle1)+'deg)';
+                    animation(step);
+                  }else{
+                    element.style.transform ='rotate('+(360+angle)+'deg)';
+                    if(callback){
+                        callback();
+                    }
+                  }
+                }
+
+                animation(step);
+
+                /*
+                TweenLite.set("#mainSpin", {rotation:0,transformOrigin:'600px 600px'});
+                TweenLite.to( document.getElementById('mainSpin'), 5,
+                    { rotation: 1080+angle,transformOrigin:'600px 600px'
+                        ,onComplete:function(){
+                        
+                        },
+                        onUpdate:function(e){
+                            console.log(e.target._gsTransform.rotation );
+                        },onUpdateParams:["{self}",this.rotation],
+                    }
+                )*/
+                /*to( document.getElementById('mainSpin'), 3,
+                    { rotation: 720,transformOrigin:'600px 600px'}
+                ).to( document.getElementById('mainSpin'), 3,
+                    { rotation: 360,transformOrigin:'600px 600px'}
+                );*/
+            };
+            return this;
+        };
+        var svgpin=svgdrawing('svgSpin');
+        
+        function initialize() {
+            $.ajax({
+                url: 'https://dev.foxpify.com:50001/luckywheel/admin/campaigns?page=1&size=20',
+                headers: {
+                    'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjcsInNob3AiOiJsdWNreS13aGVlbC1kZW1vLm15c2hvcGlmeS5jb20iLCJpYXQiOjE1MzkwOTg2MDB9.iBOQUa2MZKmv7UDEWAUy5m7i5SXTtF9qyw7jAExV4YI'
+                },
+                success: function (res) {
+                    console.log(res);
+                    var slicesFlag = false;
+                    var generatedSlices = null;
+                    for(var campaign of res.content) {
+                        if (campaign.slices && campaign.slices.length > 1) {
+                            slicesFlag = true;
+                            generatedSlices = campaign.slices;
+                            break;
+                        }
+                    }
+                    if (!slicesFlag) {
+                        return alert('Invalid number of slices')
+                    }
+                    data = []
+                    for(var i = 0; i < generatedSlices.length; i++) {
+                        data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 0, value: generatedSlices[i].probability, question: ''})
+                        data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 1, value: generatedSlices[i].probability, question: ''})
+                        data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 2, value: generatedSlices[i].probability, question: ''})
+                        // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 3, value: generatedSlices[i].probability, question: ''})
+                        // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 4, value: generatedSlices[i].probability, question: ''})
+                        // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 5, value: generatedSlices[i].probability, question: ''})
+                    }
+                    svgpin.draw(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                    alert('Cannot get data')
+                }
+            })
+        }
+
+        initialize();
+       
+    </script>
+
+    <script>
+        function spinHandler(btn) {
+            var email = document.getElementById('email').value;
+            if (!email) {
+                return alert('Enter email to try your luck')
+            }
+            var emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            if (!emailRegex.test(email)) {
+                return alert('Invalid email')
+            }
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            spinToSlice(picked);
+        }
+
+        function handle(evt) {
+          if (evt.keyCode == 13) {
+            spinHandler(document.getElementById('btnSpin'))
+          }
+        }
+
+        document.getElementById('email').addEventListener('keyup', handle)
+    </script>
+   
+</body>
+</html>
