@@ -19,7 +19,7 @@ function foxpifyButtonClickHandler(btn) {
 	if (iframeDisplayed) {
 		console.log('clicked');
 		document.body.append(iframe)
-		window.open('/iframe.html', 'foxpifyIframe')
+		window.open('https://ngocdon0127.github.io/foxpify/iframe.html', 'foxpifyIframe')
 	} else {
 		console.log('now close iframe');
 		document.getElementById('foxpifyIframe').remove()
