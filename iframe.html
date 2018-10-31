@@ -145,6 +145,7 @@
                 </div>
             </div>
         </div>
+        <button onclick="closeFoxpifyFrame()" id="foxpifyBtnCloseFrame" style="background-color: #2A191D; border: none; position:fixed; top:50px; right:50px; margin:0; padding:0; overflow:hidden; z-index:99999; font-size: 150% "><span class="glyphicon glyphicon-remove"></span></button>
     </div>
     
     <script type="text/javascript" charset="utf-8">
@@ -501,6 +502,13 @@
         }
 
         document.getElementById('email').addEventListener('keyup', handle)
+
+        function closeFoxpifyFrame() {
+            window.parent.postMessage(JSON.stringify({'msg': 'closeFoxpifyIFrame'}), '*')
+            var ifr = parent.document.getElementById('foxpifyIframe')
+            ifr.parentNode.removeChild(ifr);
+        }
+
     </script>
    
 </body>
