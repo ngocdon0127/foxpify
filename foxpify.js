@@ -1,4 +1,20 @@
-console.log('invoked');
+console.log('invoked with url:');
+// console.log(window.location); // cannot get by this
+
+var scripts = document.getElementsByTagName('script');
+var foxpifyScript = scripts[scripts.length - 1];
+// console.log(foxpifyScript.src);
+var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
+// console.log(queryStr);
+
+var foxpifyQueryRegex = /shop=([^&]+)/;
+var foxpifyQueryMatches = queryStr.match(foxpifyQueryRegex)
+
+if (foxpifyQueryMatches.length < 2) {
+	console.log('missing shop domain');
+} else {
+	console.log('shop:', foxpifyQueryMatches[1]);
+}
 
 function ob(x) {
 	return document.getElementById(x)
@@ -8,7 +24,7 @@ var iframeDisplayed = false;
 var iframe = document.createElement('iframe');
 iframe.id = 'foxpifyIframe'
 iframe.name = 'foxpifyIframe'
-iframe.setAttribute('style', 'position:fixed; top:0px; right:0px; bottom:0px; width:50%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:99999;')
+iframe.setAttribute('style', 'position:fixed; top:0px; right:0px; bottom:0px; width:75%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:99999;')
 
 
 function renderFoxpifyButton() {
@@ -30,7 +46,8 @@ function foxpifyButtonClickHandler(btn) {
 	// if (iframeDisplayed) {
 		console.log('clicked');
 		document.body.append(iframe)
-		window.open('https://ngocdon0127.github.io/foxpify/iframe.html', 'foxpifyIframe')
+		// window.open('https://ngocdon0127.github.io/foxpify/iframe.html', 'foxpifyIframe')
+		window.open('iframe.html', 'foxpifyIframe')
 	// } else {
 	// 	console.log('now close iframe');
 	// 	document.getElementById('foxpifyIframe').remove()
@@ -64,16 +81,17 @@ document.body.append(btnStyle)
 console.log('here');
 
 window.addEventListener('message', function (msg) {
-	console.log(msg);
+	// console.log(msg);
 	try {
 		var data = JSON.parse(msg.data);
 		if (data.msg == 'closeFoxpifyIFrame') {
-			document.getElementById('foxpifyIframe').remove()
+			console.log(msg);
 			ob('foxpifyButton').style.display = 'block'
+			document.getElementById('foxpifyIframe').remove()
 		} else {
 
 		}
 	} catch (e) {
-		console.log(e);
+		// console.log(e);
 	}
 })
