@@ -68,6 +68,7 @@ window.addEventListener('message', function (msg) {
 	try {
 		var data = JSON.parse(msg.data);
 		if (data.msg == 'closeFoxpifyIFrame') {
+			document.getElementById('foxpifyIframe').remove()
 			ob('foxpifyButton').style.display = 'block'
 		} else {
 
