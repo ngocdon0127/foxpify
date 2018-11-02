@@ -149,6 +149,7 @@
     </div>
     
     <script type="text/javascript" charset="utf-8">
+        var SHOP = '';
         var picked = 3;
         var arrColor=['#671953','#360c40','#863594','#cd9ec8'];
 
@@ -249,7 +250,7 @@
                             //"addEventListener" in d ? d.addEventListener(c, a) : "attachEvent" in d && d.attachEvent("on" + c, a)
                             var checkevent="addEventListener" in window?"addEventListener":"attachEvent";
                             for(var i in event){
-                                console.log('adding', i, 'to', element, 'using', checkevent);
+                                // console.log('adding', i, 'to', element, 'using', checkevent);
                                 element[checkevent](i,event[i]);
                             }
                         }
@@ -285,8 +286,8 @@
                 if(option){
                     for(var i in option){
                         if(i==='style'){
-                            console.log(option[i]);
-                            console.log(this);
+                            // console.log(option[i]);
+                            // console.log(this);
                             this.style(option[i]);
                         }else{
                             this.el.setAttributeNS(null,i,option[i]);
@@ -388,7 +389,7 @@
                   var f = !start;
                   if (!start) start = timestamp || new Date().getTime();
                   var progress = timestamp - start;
-                  console.log(progress);
+                  // console.log(progress);
                   if(progress<=3000)
                   {
                     angle1=Math.floor((progress)*108/300*2);
@@ -400,10 +401,10 @@
                   if (f) {
                     oldAngle = angle1
                   } else {
-                    console.log('diff', angle1 - oldAngle);
+                    // console.log('diff', angle1 - oldAngle);
                     oldAngle = angle1
                   }
-                  console.log('angle', angle, 'angle1', angle1);
+                  // console.log('angle', angle, 'angle1', angle1);
                   if (progress <= 7000) {
                     element.style.transform ='rotate('+(angle1)+'deg)';
                     animation(step);
@@ -438,32 +439,36 @@
             return this;
         };
         var svgpin=svgdrawing('svgSpin');
+        var runningCampaignId = ''
         
         function initialize() {
             $.ajax({
-                url: 'https://dev.foxpify.com:50001/luckywheel/admin/campaigns?page=1&size=20',
-                headers: {
-                    'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjcsInNob3AiOiJsdWNreS13aGVlbC1kZW1vLm15c2hvcGlmeS5jb20iLCJpYXQiOjE1MzkwOTg2MDB9.iBOQUa2MZKmv7UDEWAUy5m7i5SXTtF9qyw7jAExV4YI'
-                },
+                url: `https://dev.foxpify.com:50001/luckywheel/campaigns/${SHOP}`,
+                // headers: {
+                //     'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjcsInNob3AiOiJsdWNreS13aGVlbC1kZW1vLm15c2hvcGlmeS5jb20iLCJpYXQiOjE1MzkwOTg2MDB9.iBOQUa2MZKmv7UDEWAUy5m7i5SXTtF9qyw7jAExV4YI'
+                // },
                 success: function (res) {
                     console.log(res);
-                    var slicesFlag = false;
-                    var generatedSlices = null;
-                    for(var campaign of res.content) {
-                        if (campaign.slices && campaign.slices.length > 1) {
-                            slicesFlag = true;
-                            generatedSlices = campaign.slices;
-                            break;
-                        }
-                    }
-                    if (!slicesFlag) {
+                    // var slicesFlag = false;
+                    // var generatedSlices = null;
+                    // for(var campaign of res.content) {
+                    //     if (campaign.slices && campaign.slices.length > 1) {
+                    //         slicesFlag = true;
+                    //         generatedSlices = campaign.slices;
+                    //         break;
+                    //     }
+                    // }
+                    if (!res.slices) {
                         return alert('Invalid number of slices')
                     }
+                    runningCampaignId = res.id;
+                    var generatedSlices = res.slices;
                     data = []
                     for(var i = 0; i < generatedSlices.length; i++) {
-                        data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 0, value: generatedSlices[i].probability, question: ''})
-                        data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 1, value: generatedSlices[i].probability, question: ''})
-                        data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 2, value: generatedSlices[i].probability, question: ''})
+                        data.push({label: generatedSlices[i].label, value: generatedSlices[i].probability, question: ''})
+                        // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 0, value: generatedSlices[i].probability, question: ''})
+                        // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 1, value: generatedSlices[i].probability, question: ''})
+                        // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 2, value: generatedSlices[i].probability, question: ''})
                         // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 3, value: generatedSlices[i].probability, question: ''})
                         // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 4, value: generatedSlices[i].probability, question: ''})
                         // data.push({label: generatedSlices[i].label + ' ' + i + ' ' + 5, value: generatedSlices[i].probability, question: ''})
@@ -476,8 +481,6 @@
                 }
             })
         }
-
-        initialize();
        
     </script>
 
@@ -492,7 +495,37 @@
                 return alert('Invalid email')
             }
             $("html, body").animate({ scrollTop: 0 }, "slow");
-            spinToSlice(picked);
+            $.ajax({
+                url: `https://dev.foxpify.com:50001/luckywheel/subscribers/campaigns/${runningCampaignId}`,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'JSON',
+                data: JSON.stringify({
+                    fullName: document.getElementById('fullname').value,
+                    email: email
+                }),
+                success: function (res) {
+                    console.log(res);
+                    if (res.hasOwnProperty('discountCode') && (res.hasOwnProperty('index'))) {
+                        spinToSlice(res.index, function () {
+                            setTimeout(function () {
+                                window.parent.postMessage(JSON.stringify({'msg': 'markUser', email: email, campaignId: runningCampaignId}), '*')
+                                alert(`Congratulations. You got a discount code: ${res.discountCode}`);
+                            }, 500)
+                        });
+                    } else {
+                        return alert('Something went wrong. Please try again later.')
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                    if (err.responseJSON && err.responseJSON.message) {
+                        return alert(err.responseJSON.message)
+                    }
+                    return alert('Something went wrong. Please try again later')
+                }
+            })
+            
         }
 
         function handle(evt) {
@@ -508,6 +541,22 @@
             // var ifr = parent.document.getElementById('foxpifyIframe')
             // ifr.parentNode.removeChild(ifr);
         }
+
+        window.parent.postMessage(JSON.stringify({'msg': 'iframeInitialized'}), '*')
+        console.log('iframe here');
+        window.addEventListener('message', function (msg) {
+            var d = {}
+            try {
+                d = JSON.parse(msg.data)
+            } catch (e) {
+                
+            }
+            if (d.msg == 'initialize') {
+                SHOP = d.shop
+                initialize();
+                console.log('Iframe initialized with shop:', SHOP);
+            }
+        })
 
     </script>
    
