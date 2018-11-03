@@ -4,11 +4,20 @@ function initFoxpify() {
 
 	var scripts = document.getElementsByTagName('script');
 	console.log(`total ${scripts.length} scripts imported`);
-	for(var s of scripts) { 
-		console.log(s);
-		console.log('script src:', s.src)
+	var foxpifyScript = -1;
+	for(var i = 0; i < scripts.length; i++) {
+		var s = scripts[i]
+		// console.log(s);
+		// console.log('script src:', s.src)
+		if (s.src && /\/foxpify\.js/.test(s.src)) {
+			// foxpify script tag
+			foxpifyScript = i
+		}
 	}
-	var foxpifyScript = scripts[scripts.length - 1];
+	if (i == -1) {
+		console.log('foxpify script not found');
+		return
+	}
 	console.log('src:', foxpifyScript.src);
 	var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
 	console.log('query:', queryStr);
