@@ -18,6 +18,7 @@ function initFoxpify() {
 		console.log('foxpify script not found');
 		return
 	}
+	foxpifyScript = scripts[foxpifyScript];
 	console.log('src:', foxpifyScript.src);
 	var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
 	console.log('query:', queryStr);
