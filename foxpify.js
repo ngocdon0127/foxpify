@@ -40,7 +40,7 @@ function initFoxpify() {
 	var foxpifyIframeEle = document.createElement('iframe');
 	foxpifyIframeEle.id = 'foxpifyIframe'
 	foxpifyIframeEle.name = 'foxpifyIframe'
-	foxpifyIframeEle.setAttribute('style', 'position:fixed; top:0px; right:0px; bottom:0px; width:75%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:99999;')
+	foxpifyIframeEle.setAttribute('style', 'position:fixed; top:0px; left:-20%; bottom:0px; width:100%; height:100%; border:none; padding:0; margin-top: 0; overflow:hidden; z-index:99999;')
 
 
 	function renderFoxpifyButton() {

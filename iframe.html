@@ -79,9 +79,11 @@
     }
     */
     body{
-        background: #251217;
         color: white;
-        font-family: Roboto, sans-serif
+        font-family: Roboto, sans-serif;
+        /*padding-top: 10%;*/
+        height: 100%;
+        min-height: 100%;
     }
     #policy > a  {
         color: white;
@@ -92,60 +94,63 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js'></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="padding: 0px; margin: 0px">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="svgmain" style="padding-top: 20px" >
-                <svg id="svgSpin" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 1322.2 1200">
-                </svg>
-            </div>
-        
-            <div style="padding-top: 20px" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div id="">
-                    <h1 id="">
-                        Win an exclusive prize!
-                    </h1>
-                    <p id="">
-                        Enter your full name and email to spin the wheel for a chance to win
-                    </p>
-                    <span id="">
-                        <input class="form-control" name="fullname" placeholder=" Fullname " tabindex="1" id="fullname" />
-                    </span>
-                    <br>
-                    <span id="">
-                        <input class="form-control" name="email" placeholder=" Email "  type="email" id="email" />
-                    </span>
-                    <br>
-                    <label id="">
-                        Consent
-                    </label>
-                    <div id="policy" class="" style="background-color: rgb(232, 146, 12); padding: 10px 15px; color: white">
-                        Detailed information on the processing of personal data can be found in the <a href="javascript:void(0)">privacy policy</a>. In addition, you will find them in the message confirming the subscription to the newsletter.
-                    </div>
-                    <br>
+            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="background: #251217; height: 100vh; padding-top: 10%;">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="svgmain" style="padding-top: 20px;" >
+                    <svg id="svgSpin" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 1322.2 1200">
+                    </svg>
+                </div>
+            
+                <div style="padding-top: 20px" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <button onclick="closeFoxpifyFrame()" id="foxpifyBtnCloseFrame" style="background-color: #2A191D; border: none; position:relative; top:0px; left:95%; margin:0; padding:0; overflow:hidden; z-index:99999; font-size: 150% "><span class="glyphicon glyphicon-remove"></span></button>
                     <div id="">
-                        
-                        <label for="gdpr-checkbox" id="">
-                            By clicking the below button, You allow us to store your personal data and to use it to send you the newsletter
+                        <h1 id="">
+                            Win an exclusive prize!
+                        </h1>
+                        <p id="">
+                            Enter your full name and email to spin the wheel for a chance to win
+                        </p>
+                        <span id="">
+                            <input class="form-control" name="fullname" placeholder=" Fullname " tabindex="1" id="fullname" />
+                        </span>
+                        <br>
+                        <span id="">
+                            <input class="form-control" name="email" placeholder=" Email "  type="email" id="email" />
+                        </span>
+                        <br>
+                        <label id="">
+                            Consent
                         </label>
-                    </div>
-                    <div id="">
-                        <button class="btn btn-block btn-default" id="btnSpin" onclick="spinHandler(this)">
-                            Try your win!
-                        </button>
-                    </div>
-                    <br>
-                    <!-- <div class="row">
-                        <div class="col-lg-6">
-                            <input type="number" step="2" value="10" id="noSlides" class="form-control" placeholder="Number of slides">
+                        <div id="policy" class="" style="background-color: rgb(232, 146, 12); padding: 10px 15px; color: white">
+                            Detailed information on the processing of personal data can be found in the <a href="javascript:void(0)">privacy policy</a>. In addition, you will find them in the message confirming the subscription to the newsletter.
                         </div>
-                        <div class="col-lg-4" style="margin-left: 20px">
-                            <button class="btn btn-block" style="background-color: #FFFAD5" onclick="redraw()">Draw</button>
+                        <br>
+                        <div id="">
+                            
+                            <label for="gdpr-checkbox" id="">
+                                By clicking the below button, You allow us to store your personal data and to use it to send you the newsletter
+                            </label>
                         </div>
-                    </div> -->
+                        <div id="">
+                            <button class="btn btn-block btn-default" id="btnSpin" onclick="spinHandler(this)">
+                                Try your win!
+                            </button>
+                        </div>
+                        <br>
+                        <!-- <div class="row">
+                            <div class="col-lg-6">
+                                <input type="number" step="2" value="10" id="noSlides" class="form-control" placeholder="Number of slides">
+                            </div>
+                            <div class="col-lg-4" style="margin-left: 20px">
+                                <button class="btn btn-block" style="background-color: #FFFAD5" onclick="redraw()">Draw</button>
+                            </div>
+                        </div> -->
+                    </div>
                 </div>
             </div>
+            <div class="col-lg-2 col-md-2 col-sm-0 col-xs-0" style="background-color: transparent !important;"></div>
         </div>
-        <button onclick="closeFoxpifyFrame()" id="foxpifyBtnCloseFrame" style="background-color: #2A191D; border: none; position:fixed; top:50px; right:50px; margin:0; padding:0; overflow:hidden; z-index:99999; font-size: 150% "><span class="glyphicon glyphicon-remove"></span></button>
     </div>
     
     <script type="text/javascript" charset="utf-8">
@@ -549,7 +554,7 @@
             try {
                 d = JSON.parse(msg.data)
             } catch (e) {
-                
+
             }
             if (d.msg == 'initialize') {
                 SHOP = d.shop
