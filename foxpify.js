@@ -3,6 +3,11 @@ function initFoxpify() {
 	// console.log(window.location); // cannot get by this
 
 	var scripts = document.getElementsByTagName('script');
+	console.log(`total ${scripts.length} scripts imported`);
+	for(var s of scripts) { 
+		console.log(s);
+		console.log('script src:', s.src)
+	}
 	var foxpifyScript = scripts[scripts.length - 1];
 	console.log('src:', foxpifyScript.src);
 	var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
