@@ -14,7 +14,7 @@ function initFoxpify() {
 			foxpifyScript = i
 		}
 	}
-	if (i == -1) {
+	if (foxpifyScript == -1) {
 		console.log('foxpify script not found');
 		return
 	}
