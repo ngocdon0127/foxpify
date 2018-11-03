@@ -4,9 +4,9 @@ function initFoxpify() {
 
 	var scripts = document.getElementsByTagName('script');
 	var foxpifyScript = scripts[scripts.length - 1];
-	// console.log(foxpifyScript.src);
+	console.log('src:', foxpifyScript.src);
 	var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
-	// console.log(queryStr);
+	console.log('query:', queryStr);
 
 	var foxpifyQueryRegex = /shop=([^&]+)/;
 	var foxpifyQueryMatches = queryStr.match(foxpifyQueryRegex)
