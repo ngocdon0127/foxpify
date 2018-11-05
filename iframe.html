@@ -84,6 +84,10 @@
         /*padding-top: 10%;*/
         height: 100%;
         min-height: 100%;
+        background-color: transparent;
+    }
+    html {
+        background-color: transparent;
     }
     #policy > a  {
         color: white;
@@ -94,16 +98,16 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js'></script>
 </head>
 <body>
-    <div class="container" style="padding: 0px; margin: 0px">
-        <div class="row">
-            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="background: #251217; height: 100vh; padding-top: 10%;">
+    <div class="container" style="padding: 0px; margin: 0px; background-color: transparent;">
+        <div class="row" style="background-color: transparent;">
+            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="background: #251217; min-height: 100vh; padding-top: 10%;">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="svgmain" style="padding-top: 20px;" >
                     <svg id="svgSpin" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 1322.2 1200">
                     </svg>
                 </div>
             
                 <div style="padding-top: 20px" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <button onclick="closeFoxpifyFrame()" id="foxpifyBtnCloseFrame" style="background-color: #2A191D; border: none; position:relative; top:0px; left:95%; margin:0; padding:0; overflow:hidden; z-index:99999; font-size: 150% "><span class="glyphicon glyphicon-remove"></span></button>
+                    <button onclick="closeFoxpifyFrame()" id="foxpifyBtnCloseFrame" style="background-color: #2A191D; border: none; position:absolute; top:0px; right:0px; margin:0; padding:0; overflow:hidden; z-index:99999; font-size: 150% "><span class="glyphicon glyphicon-remove"></span></button>
                     <div id="">
                         <h1 id="">
                             Win an exclusive prize!

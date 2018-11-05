@@ -1,5 +1,7 @@
 function initFoxpify() {
 	console.log('invoked with url:');
+	// var foxpifyIframeUrl = 'iframe.html'
+	var foxpifyIframeUrl = 'https://ngocdon0127.github.io/foxpify/iframe.html'
 	// console.log(window.location); // cannot get by this
 
 	var scripts = document.getElementsByTagName('script');
@@ -40,7 +42,7 @@ function initFoxpify() {
 	var foxpifyIframeEle = document.createElement('iframe');
 	foxpifyIframeEle.id = 'foxpifyIframe'
 	foxpifyIframeEle.name = 'foxpifyIframe'
-	foxpifyIframeEle.setAttribute('style', 'position:fixed; top:0px; left:-20%; bottom:0px; width:100%; height:100%; border:none; padding:0; margin-top: 0; overflow:hidden; z-index:99999;')
+	foxpifyIframeEle.setAttribute('style', 'position:fixed; top:0px; left:0%; bottom:0px; width:100%; height:100%; border:none; padding:0; margin-top: 0; overflow:hidden; z-index:99999;')
 
 
 	function renderFoxpifyButton() {
@@ -110,8 +112,7 @@ function initFoxpify() {
 		console.log('invoked');
 		console.log('clicked');
 		document.body.append(foxpifyIframeEle)
-		// window.open('iframe.html', 'foxpifyIframe')
-		window.open('https://ngocdon0127.github.io/foxpify/iframe.html', 'foxpifyIframe')
+		window.open(foxpifyIframeUrl, 'foxpifyIframe')
 		ob('foxpifyButton').style.display = 'none'
 	}
 
