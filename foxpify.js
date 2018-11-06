@@ -1,7 +1,8 @@
 function initFoxpify() {
 	console.log('invoked with url:');
 	// var foxpifyIframeUrl = 'iframe.html'
-	var foxpifyIframeUrl = 'https://ngocdon0127.github.io/foxpify/iframe.html'
+	var foxpifyIframeUrl = 'https://https://lucky-wheel.foxpify.com/ui/iframe.html'
+	// var foxpifyIframeUrl = 'https://ngocdon0127.github.io/foxpify/iframe.html'
 	// console.log(window.location); // cannot get by this
 
 	var scripts = document.getElementsByTagName('script');
