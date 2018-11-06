@@ -1,4 +1,4 @@
-version: '1'
+version: '2'
 services:
   luckywheel-ui:
     image: registry.gitlab.com/foxpify/luckywheel-ui
