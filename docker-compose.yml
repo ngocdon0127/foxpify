@@ -1,0 +1,7 @@
+version: '1'
+services:
+  luckywheel-ui:
+    image: registry.gitlab.com/foxpify/luckywheel-ui
+    stdin_open: true
+    labels:
+      io.rancher.container.pull_image: always
