@@ -1,0 +1,66 @@
+---
+#
+# Gitlab CI configuration file
+#
+
+stages:
+- dockerize
+- deploy
+
+
+before_script:
+ - export VERSION=$(cat version.txt)
+ - export RANCHER_URL=http://rancher.foxpify.com:8080/
+ - export RANCHER_ACCESS_KEY=$R_ACCESS_KEY
+ - export RANCHER_SECRET_KEY=$R_SECRET_KEY
+
+
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  SERVICE_NAME: luckywheel-ui
+  STACK_NAME: Service
+
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  untracked: true
+  paths:
+  - .m2/repository/
+  - target/
+
+
+#
+# Dockerize other environment
+#
+dockerize_dev:
+  stage: dockerize
+  tags:
+  - foxpify
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: overlay
+  services:
+  - docker:dind
+  only:
+  - master
+  script:
+  - docker build -t registry.gitlab.com/foxpify/$SERVICE_NAME:$VERSION .
+  - docker login registry.gitlab.com -u $IRUSER -p $IRPASS
+  - docker push registry.gitlab.com/foxpify/$SERVICE_NAME:$VERSION
+
+# 
+# DEPLOY development
+# 
+deploy_dev:
+  stage: deploy
+  tags:
+  - foxpify
+  image: kimwoochoong/rancher-compose:latest
+  only:
+  - master
+  script:
+  - 'sed -i "/foxpify\/$(echo $SERVICE_NAME)/c\  \  image\: registry.gitlab.com\/foxpify\/$(echo $SERVICE_NAME):$(echo $VERSION)" docker-compose.yml'
+  - rancher-compose -f docker-compose.yml -r rancher-compose.yml -p $STACK_NAME up -d --force-upgrade -c $SERVICE_NAME
+  when: on_success
+
