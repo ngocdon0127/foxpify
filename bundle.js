@@ -102,6 +102,7 @@ function initFoxpify() {
 				}
 				if (!c.hasOwnProperty(res.id)) {
 					renderFoxpifyButton()
+					foxpifyButtonClickHandler(document.getElementById('foxpifyButton'));
 				}
   		}
   	}

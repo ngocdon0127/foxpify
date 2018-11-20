@@ -519,7 +519,11 @@
                         spinToSlice(res.index, function () {
                             setTimeout(function () {
                                 window.parent.postMessage(JSON.stringify({'msg': 'markUser', email: email, campaignId: runningCampaignId}), '*')
-                                alert(`Congratulations. You got a discount code: ${res.discountCode}`);
+                                if (res.discountCode) {
+                                    alert(`Congratulations. You got a discount code: ${res.discountCode}`);
+                                } else {
+                                    alert(`Better luck next time.`);
+                                }
                             }, 500)
                         });
                     } else {
