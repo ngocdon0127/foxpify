@@ -550,7 +550,7 @@
         document.getElementById('email').addEventListener('keyup', handle)
 
         function closeFoxpifyFrame() {
-            window.parent.postMessage(JSON.stringify({'msg': 'closeFoxpifyIFrame'}), '*')
+            window.parent.postMessage(JSON.stringify({'msg': 'closeFoxpifyIFrame', campaignId: runningCampaignId}), '*')
             // var ifr = parent.document.getElementById('foxpifyIframe')
             // ifr.parentNode.removeChild(ifr);
         }

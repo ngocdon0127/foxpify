@@ -102,6 +102,9 @@ function initFoxpify() {
 				}
 				if (!c.hasOwnProperty(res.id)) {
 					renderFoxpifyButton()
+				}
+				if (!c.hasOwnProperty('auto-open-popup-' + res.id)) {
+					// new campaign. auto open popup
 					foxpifyButtonClickHandler(document.getElementById('foxpifyButton'));
 				}
   		}
@@ -155,6 +158,16 @@ function initFoxpify() {
 			console.log(msg);
 			ob('foxpifyButton').style.display = 'block'
 			document.getElementById('foxpifyIframe').remove()
+			// mark that user clicked close-button
+			// 'auto-open-popup-' + res.id
+			var c = {}
+			try {
+				c = JSON.parse(foxpifyGetCookie('foxpify'))
+			} catch (e) {
+
+			}
+			c['auto-open-popup-' + data.campaignId] = false
+			foxpifySetCookie('foxpify', JSON.stringify(c))
 		} else if (data.msg == 'iframeInitialized') {
 			foxpifyIframeEle.contentWindow.postMessage(JSON.stringify({
 				msg: 'initialize',
