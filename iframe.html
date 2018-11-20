@@ -505,7 +505,7 @@
             }
             $("html, body").animate({ scrollTop: 0 }, "slow");
             $.ajax({
-                url: `https://dev.foxpify.com:50001/luckywheel/subscribers/campaigns/${runningCampaignId}`,
+                url: `https://lucky-wheel.foxpify.com/api/campaigns/${runningCampaignId}`,
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'JSON',
