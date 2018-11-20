@@ -57,6 +57,27 @@ function initFoxpify() {
 			foxpifyButtonClickHandler(evt.target)
 		})
 		document.body.append(foxpifyButton)
+		setTimeout(function () {
+			foxpifyButton.style.transform = 'rotateZ(2160deg)'
+			foxpifyButton.style.transition = 'linear 1s'
+			foxpifyButton.style.width = '100px'
+			foxpifyButton.style.height = '100px'
+			foxpifyButton.style.right = '0px'
+			foxpifyButton.style.bottom = '0px'
+			foxpifyButton.style.opacity = '0.9'
+
+			setTimeout(function () {
+				foxpifyButton.style.transform = 'rotateZ(0deg)'
+				foxpifyButton.style.width = '50px'
+				foxpifyButton.style.height = '50px'
+				foxpifyButton.style.right = '25px'
+				foxpifyButton.style.bottom = '25px'
+				setTimeout(function () {
+					foxpifyButton.style.transition = 'linear 0.2s'
+					// foxpifyButton.style.transform = 'rotateZ(0deg)'
+				}, 1000)
+			}, 1000)
+		}, 1000)
 	}
 
 	// $.ajax({
@@ -131,25 +152,25 @@ function initFoxpify() {
 			border: none;
 			border-radius: 50%;
 			color: #fff;
-			width: 50px;
-			height: 50px;
+			width: 20px;
+			height: 20px;
 			position: fixed;
-			bottom: 25px;
-			right: 25px;
+			bottom: 40px;
+			right: 40px;
 			z-index: 999999;
 			cursor: pointer;
-			opacity: 0.8;
-			transition: ease 0.2s;
+			opacity: 0.0;
+			transition: linear 0.2s;
 		}
 
 		#foxpifyButton:hover {
 			background-color: #5fc15f;
-			width: 60px;
-			height: 60px;
-			bottom: 20px;
-			right: 20px;
+			width: 60px !important;
+			height: 60px !important;
+			bottom: 20px !important;
+			right: 20px !important;
 			opacity: 1;
-			transform: rotateZ(360deg);
+			transform: rotateZ(360deg) !important;
 		}
 	</style>`
 
