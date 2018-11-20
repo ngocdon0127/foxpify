@@ -106,7 +106,7 @@ function initFoxpify() {
   		}
   	}
   }
-  xhr.open('GET', `https://dev.foxpify.com:50001/luckywheel/campaigns/${foxpifyQueryMatches[1]}`)
+  xhr.open('GET', `https://lucky-wheel.foxpify.com/api/campaigns/lucky-wheel-demo.myshopify.com/${foxpifyQueryMatches[1]}`)
   xhr.send()
 
 	function foxpifyButtonClickHandler(btn) {

@@ -1,6 +1,203 @@
-function initFoxpify(){function e(){var d=document.createElement("button");d.id="foxpifyButton";d.innerHTML="<b>S</b>";d.addEventListener("click",function(d){console.log("invoked");console.log("clicked");document.body.append(f);window.open("https://lucky-wheel.foxpify.com/ui/iframe.html","foxpifyIframe");document.getElementById("foxpifyButton").style.display="none"});document.body.append(d)}console.log("invoked with url:");var a=document.getElementsByTagName("script");console.log("total "+a.length+
-" scripts imported");for(var c=-1,b=0;b<a.length;b++){var k=a[b];k.src&&/\/foxpify\.js/.test(k.src)&&(c=b)}if(-1==c)console.log("foxpify script not found");else{c=a[c];console.log("src:",c.src);a=c.src.replace(/^[^\?]+\??/,"");console.log("query:",a);var g=a.match(/shop=([^&]+)/);if(!g||2>g.length)console.log("missing shop domain");else{console.log("shop:",g[1]);var f=document.createElement("iframe");f.id="foxpifyIframe";f.name="foxpifyIframe";f.setAttribute("style","position:fixed; top:0px; left:0%; bottom:0px; width:100%; height:100%; border:none; padding:0; margin-top: 0; overflow:hidden; z-index:99999;");
-a=new XMLHttpRequest;a.onreadystatechange=function(d){console.log(this.readyState);console.log(this.status);if(4==this.readyState&&200==this.status){d={};try{d=JSON.parse(this.responseText)}catch(h){console.log(h)}console.log(d);if(d.hasOwnProperty("id")){var a={};try{a=JSON.parse(foxpifyGetCookie("foxpify"))}catch(h){}a.hasOwnProperty(d.id)||e()}}};a.open("GET","https://dev.foxpify.com:50001/luckywheel/campaigns/"+g[1]);a.send();a=document.createElement("div");a.innerHTML="<style>\n\t\t#foxpifyButton {\n\t\t\tbackground-color: #5cb85c;\n\t\t\tborder: none;\n\t\t\tborder-radius: 50%;\n\t\t\tcolor: #fff;\n\t\t\twidth: 50px;\n\t\t\theight: 50px;\n\t\t\tposition: fixed;\n\t\t\tbottom: 25px;\n\t\t\tright: 25px;\n\t\t\tz-index: 999999;\n\t\t\tcursor: pointer;\n\t\t}\n\n\t\t#foxpifyButton:hover {\n\t\t\tbackground-color: #5fc15f;\n\t\t}\n\t</style>";
-document.body.append(a);console.log("here");window.addEventListener("message",function(a){var b={};try{b=JSON.parse(a.data)}catch(h){}if("closeFoxpifyIFrame"==b.msg)console.log(a),document.getElementById("foxpifyButton").style.display="block",document.getElementById("foxpifyIframe").remove();else if("iframeInitialized"==b.msg)f.contentWindow.postMessage(JSON.stringify({msg:"initialize",shop:g[1]}),"*"),console.log("message initialize sent to iframe");else if("markUser"==b.msg){a={};try{a=JSON.parse(foxpifyGetCookie("foxpify"))}catch(h){}a.hasOwnProperty(b.campaignId)&&
-a[b.campaignId]instanceof Array?a[b.campaignId].push(b.email):a[b.campaignId]=[b.email];foxpifySetCookie("foxpify",JSON.stringify(a))}})}}}function foxpifySetCookie(e,a,c){var b=new Date;b.setTime(b.getTime()+864E5*c);c="expires="+b.toUTCString();document.cookie=e+"="+a+";"+c+";path=/"}
-function foxpifyGetCookie(e){e+="=";for(var a=decodeURIComponent(document.cookie).split(";"),c=0;c<a.length;c++){for(var b=a[c];" "==b.charAt(0);)b=b.substring(1);if(0==b.indexOf(e))return b.substring(e.length,b.length)}return""}initFoxpify();
+function initFoxpify() {
+	console.log('invoked with url:');
+	// var foxpifyIframeUrl = 'iframe.html'
+	var foxpifyIframeUrl = 'https://lucky-wheel.foxpify.com/ui/iframe.html'
+	// var foxpifyIframeUrl = 'https://ngocdon0127.github.io/foxpify/iframe.html'
+	// console.log(window.location); // cannot get by this
+
+	var scripts = document.getElementsByTagName('script');
+	console.log(`total ${scripts.length} scripts imported`);
+	var foxpifyScript = -1;
+	for(var i = 0; i < scripts.length; i++) {
+		var s = scripts[i]
+		// console.log(s);
+		// console.log('script src:', s.src)
+		if (s.src && /\/foxpify\.js/.test(s.src)) {
+			// foxpify script tag
+			foxpifyScript = i
+		}
+	}
+	if (foxpifyScript == -1) {
+		console.log('foxpify script not found');
+		return
+	}
+	foxpifyScript = scripts[foxpifyScript];
+	console.log('src:', foxpifyScript.src);
+	var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
+	console.log('query:', queryStr);
+
+	var foxpifyQueryRegex = /shop=([^&]+)/;
+	var foxpifyQueryMatches = queryStr.match(foxpifyQueryRegex)
+
+	if (!foxpifyQueryMatches || (foxpifyQueryMatches.length < 2)) {
+		console.log('missing shop domain');
+		return
+	} else {
+		console.log('shop:', foxpifyQueryMatches[1]);
+	}
+
+	function ob(x) {
+		return document.getElementById(x)
+	}
+
+	var foxpifyIframeEle = document.createElement('iframe');
+	foxpifyIframeEle.id = 'foxpifyIframe'
+	foxpifyIframeEle.name = 'foxpifyIframe'
+	foxpifyIframeEle.setAttribute('style', 'position:fixed; top:0px; left:0%; bottom:0px; width:100%; height:100%; border:none; padding:0; margin-top: 0; overflow:hidden; z-index:99999;')
+
+
+	function renderFoxpifyButton() {
+		var foxpifyButton = document.createElement('button');
+		foxpifyButton.id = 'foxpifyButton'
+		foxpifyButton.innerHTML = '<b>S</b>'
+		// foxpifyButton.setAttribute('class', 'btn btn-success')
+		foxpifyButton.addEventListener('click', function (evt) {
+			foxpifyButtonClickHandler(evt.target)
+		})
+		document.body.append(foxpifyButton)
+	}
+
+	// $.ajax({
+ //    url: `https://dev.foxpify.com:50001/luckywheel/campaigns/${foxpifyQueryMatches[1]}`,
+ //    headers: {
+ //        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjcsInNob3AiOiJsdWNreS13aGVlbC1kZW1vLm15c2hvcGlmeS5jb20iLCJpYXQiOjE1MzkwOTg2MDB9.iBOQUa2MZKmv7UDEWAUy5m7i5SXTtF9qyw7jAExV4YI'
+ //    },
+ //    success: function (res) {
+ //      if (res.hasOwnProperty('id')) {
+ //      	var c = {}
+	// 			try {
+	// 				c = JSON.parse(foxpifyGetCookie('foxpify'))
+	// 			} catch (e) {
+
+	// 			}
+	// 			if (!c.hasOwnProperty(data.campaignId)) {
+	// 				renderFoxpifyButton()
+	// 			}
+ //      }
+ //    },
+ //    error: function (err) {
+ //    	console.log(err);
+ //    }
+ //  })
+
+  var xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = function (status) {
+  	console.log(this.readyState);
+  	console.log(this.status);
+  	if ((this.readyState == 4) && (this.status == 200)) {
+  		// console.log(this.responseText);
+  		var res = {}
+  		try {
+  			res = JSON.parse(this.responseText)
+  		} catch (e) {
+  			console.log(e);
+  		}
+  		console.log(res);
+  		if (res.hasOwnProperty('id')) { // has 1 campaign running
+  			var c = {}
+				try {
+					c = JSON.parse(foxpifyGetCookie('foxpify'))
+				} catch (e) {
+
+				}
+				if (!c.hasOwnProperty(res.id)) {
+					renderFoxpifyButton()
+				}
+  		}
+  	}
+  }
+  xhr.open('GET', `https://lucky-wheel.foxpify.com/api/campaigns/lucky-wheel-demo.myshopify.com/${foxpifyQueryMatches[1]}`)
+  xhr.send()
+
+	function foxpifyButtonClickHandler(btn) {
+		console.log('invoked');
+		console.log('clicked');
+		document.body.append(foxpifyIframeEle)
+		window.open(foxpifyIframeUrl, 'foxpifyIframe')
+		ob('foxpifyButton').style.display = 'none'
+	}
+
+	var btnStyle = document.createElement('div');
+	btnStyle.innerHTML = 
+	`<style>
+		#foxpifyButton {
+			background-color: #5cb85c;
+			border: none;
+			border-radius: 50%;
+			color: #fff;
+			width: 50px;
+			height: 50px;
+			position: fixed;
+			bottom: 25px;
+			right: 25px;
+			z-index: 999999;
+			cursor: pointer;
+		}
+
+		#foxpifyButton:hover {
+			background-color: #5fc15f;
+		}
+	</style>`
+
+	document.body.append(btnStyle)
+	console.log('here');
+
+	window.addEventListener('message', function (msg) {
+		// console.log(msg);
+		var data = {}
+		try {
+			var data = JSON.parse(msg.data);
+		} catch (e) {
+			// console.log(e);
+		}
+		if (data.msg == 'closeFoxpifyIFrame') {
+			console.log(msg);
+			ob('foxpifyButton').style.display = 'block'
+			document.getElementById('foxpifyIframe').remove()
+		} else if (data.msg == 'iframeInitialized') {
+			foxpifyIframeEle.contentWindow.postMessage(JSON.stringify({
+				msg: 'initialize',
+				shop: foxpifyQueryMatches[1]
+			}), '*')
+			console.log('message initialize sent to iframe');
+		} else if (data.msg == 'markUser') {
+			var c = {}
+			try {
+				c = JSON.parse(foxpifyGetCookie('foxpify'))
+			} catch (e) {
+
+			}
+			if (c.hasOwnProperty(data.campaignId) && (c[data.campaignId] instanceof Array)) {
+				c[data.campaignId].push(data.email)
+			} else {
+				c[data.campaignId] = [data.email]
+			}
+			foxpifySetCookie('foxpify', JSON.stringify(c))
+		}
+	})
+}
+
+function foxpifySetCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function foxpifyGetCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+initFoxpify()
