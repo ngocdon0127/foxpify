@@ -47,9 +47,11 @@ function initFoxpify() {
 
 
 	function renderFoxpifyButton() {
-		var foxpifyButton = document.createElement('button');
+		// var foxpifyButton = document.createElement('button');
+		var foxpifyButton = document.createElement('img');
 		foxpifyButton.id = 'foxpifyButton'
-		foxpifyButton.innerHTML = '<b>S</b>'
+		// foxpifyButton.innerHTML = '<b>S</b>'
+		foxpifyButton.src = "https://lucky-wheel.foxpify.com/ui/gambler.png";
 		// foxpifyButton.setAttribute('class', 'btn btn-success')
 		foxpifyButton.addEventListener('click', function (evt) {
 			foxpifyButtonClickHandler(evt.target)
@@ -103,6 +105,10 @@ function initFoxpify() {
 				if (!c.hasOwnProperty(res.id)) {
 					renderFoxpifyButton()
 				}
+				if (!c.hasOwnProperty('auto-open-popup-' + res.id)) {
+					// new campaign. auto open popup
+					foxpifyButtonClickHandler(document.getElementById('foxpifyButton'));
+				}
   		}
   	}
   }
@@ -132,10 +138,18 @@ function initFoxpify() {
 			right: 25px;
 			z-index: 999999;
 			cursor: pointer;
+			opacity: 0.8;
+			transition: ease 0.2s;
 		}
 
 		#foxpifyButton:hover {
 			background-color: #5fc15f;
+			width: 60px;
+			height: 60px;
+			bottom: 20px;
+			right: 20px;
+			opacity: 1;
+			transform: rotateZ(360deg);
 		}
 	</style>`
 
@@ -154,6 +168,16 @@ function initFoxpify() {
 			console.log(msg);
 			ob('foxpifyButton').style.display = 'block'
 			document.getElementById('foxpifyIframe').remove()
+			// mark that user clicked close-button
+			// 'auto-open-popup-' + res.id
+			var c = {}
+			try {
+				c = JSON.parse(foxpifyGetCookie('foxpify'))
+			} catch (e) {
+
+			}
+			c['auto-open-popup-' + data.campaignId] = false
+			foxpifySetCookie('foxpify', JSON.stringify(c))
 		} else if (data.msg == 'iframeInitialized') {
 			foxpifyIframeEle.contentWindow.postMessage(JSON.stringify({
 				msg: 'initialize',
