@@ -503,6 +503,10 @@
             if (!emailRegex.test(email)) {
                 return alert('Invalid email')
             }
+            var fullName = document.getElementById('fullname').value;
+            if (!fullName) {
+                return alert('Enter full name to try your luck')
+            }
             $("html, body").animate({ scrollTop: 0 }, "slow");
             $.ajax({
                 url: `https://lucky-wheel.foxpify.com/api/subscribers/campaigns/${runningCampaignId}`,

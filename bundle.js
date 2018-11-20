@@ -51,7 +51,7 @@ function initFoxpify() {
 		var foxpifyButton = document.createElement('img');
 		foxpifyButton.id = 'foxpifyButton'
 		// foxpifyButton.innerHTML = '<b>S</b>'
-		foxpifyButton.src = "gambler.png";
+		foxpifyButton.src = "https://lucky-wheel.foxpify.com/ui/gambler.png";
 		// foxpifyButton.setAttribute('class', 'btn btn-success')
 		foxpifyButton.addEventListener('click', function (evt) {
 			foxpifyButtonClickHandler(evt.target)
