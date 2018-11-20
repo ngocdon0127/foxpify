@@ -138,10 +138,18 @@ function initFoxpify() {
 			right: 25px;
 			z-index: 999999;
 			cursor: pointer;
+			opacity: 0.8;
+			transition: ease 0.2s;
 		}
 
 		#foxpifyButton:hover {
 			background-color: #5fc15f;
+			width: 60px;
+			height: 60px;
+			bottom: 20px;
+			right: 20px;
+			opacity: 1;
+			transform: rotateZ(360deg);
 		}
 	</style>`
 
