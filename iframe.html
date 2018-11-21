@@ -399,6 +399,18 @@
             };
 
             this.spinToSlice = function(idx, callback) {
+                console.log('old idx', idx);
+                idx = data.length + 1 - idx;
+                if (idx < 0) {
+                    while (idx < 0) {
+                        idx += data.length
+                    }
+                } else if (idx >= data.length) {
+                    while (idx >= data.length) {
+                        idx -= data.length
+                    }
+                }
+                console.log('idx', idx);
                 var angle = 360 / data.length * idx
                 this.spin(angle, callback)
             };
