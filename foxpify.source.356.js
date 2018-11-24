@@ -1,12 +1,12 @@
 function initFoxpify() {
-	console.log('invoked with url:');
+	// console.log('invoked with url:');
 	// var foxpifyIframeUrl = 'iframe.html'
 	var foxpifyIframeUrl = 'https://lucky-wheel.foxpify.com/ui/iframe.html'
 	// var foxpifyIframeUrl = 'https://ngocdon0127.github.io/foxpify/iframe.html'
 	// console.log(window.location); // cannot get by this
 
 	var scripts = document.getElementsByTagName('script');
-	console.log(`total ${scripts.length} scripts imported`);
+	// console.log(`total ${scripts.length} scripts imported`);
 	var foxpifyScript = -1;
 	for(var i = 0; i < scripts.length; i++) {
 		var s = scripts[i]
@@ -18,22 +18,22 @@ function initFoxpify() {
 		}
 	}
 	if (foxpifyScript == -1) {
-		console.log('foxpify script not found');
+		// console.log('foxpify script not found');
 		return
 	}
 	foxpifyScript = scripts[foxpifyScript];
-	console.log('src:', foxpifyScript.src);
+	// console.log('src:', foxpifyScript.src);
 	var queryStr = foxpifyScript.src.replace(/^[^\?]+\??/,'');
-	console.log('query:', queryStr);
+	// console.log('query:', queryStr);
 
 	var foxpifyQueryRegex = /shop=([^&]+)/;
 	var foxpifyQueryMatches = queryStr.match(foxpifyQueryRegex)
 
 	if (!foxpifyQueryMatches || (foxpifyQueryMatches.length < 2)) {
-		console.log('missing shop domain');
+		// console.log('missing shop domain');
 		return
 	} else {
-		console.log('shop:', foxpifyQueryMatches[1]);
+		// console.log('shop:', foxpifyQueryMatches[1]);
 	}
 
 	function ob(x) {
@@ -105,17 +105,17 @@ function initFoxpify() {
 
   var xhr = new XMLHttpRequest()
   xhr.onreadystatechange = function (status) {
-  	console.log(this.readyState);
-  	console.log(this.status);
+  	// console.log(this.readyState);
+  	// console.log(this.status);
   	if ((this.readyState == 4) && (this.status == 200)) {
   		// console.log(this.responseText);
   		var res = {}
   		try {
   			res = JSON.parse(this.responseText)
   		} catch (e) {
-  			console.log(e);
+  			// console.log(e);
   		}
-  		console.log(res);
+  		// console.log(res);
   		if (res.hasOwnProperty('id')) { // has 1 campaign running
   			var c = {}
 				try {
@@ -137,8 +137,8 @@ function initFoxpify() {
   xhr.send()
 
 	function foxpifyButtonClickHandler(btn) {
-		console.log('invoked');
-		console.log('clicked');
+		// console.log('invoked');
+		// console.log('clicked');
 		document.body.append(foxpifyIframeEle)
 		window.open(foxpifyIframeUrl, 'foxpifyIframe')
 		ob('foxpifyButton').style.display = 'none'
@@ -175,7 +175,7 @@ function initFoxpify() {
 	</style>`
 
 	document.body.append(btnStyle)
-	console.log('here');
+	// console.log('here');
 
 	window.addEventListener('message', function (msg) {
 		// console.log(msg);
@@ -186,7 +186,7 @@ function initFoxpify() {
 			// console.log(e);
 		}
 		if (data.msg == 'closeFoxpifyIFrame') {
-			console.log(msg);
+			// console.log(msg);
 			ob('foxpifyButton').style.display = 'block'
 			document.getElementById('foxpifyIframe').remove()
 			// mark that user clicked close-button
@@ -204,7 +204,7 @@ function initFoxpify() {
 				msg: 'initialize',
 				shop: foxpifyQueryMatches[1]
 			}), '*')
-			console.log('message initialize sent to iframe');
+			// console.log('message initialize sent to iframe');
 		} else if (data.msg == 'markUser') {
 			var c = {}
 			try {

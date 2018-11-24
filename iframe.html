@@ -252,7 +252,7 @@
                     //"addEventListener" in d ? d.addEventListener(c, a) : "attachEvent" in d && d.attachEvent("on" + c, a)
                     var checkevent="addEventListener" in window?"addEventListener":"attachEvent";
                     for(var i in events){
-                        console.log('adding', i, 'to', this.el, 'using', checkevent);
+                        // console.log('adding', i, 'to', this.el, 'using', checkevent);
                         this.el[checkevent](i,events[i]);
                     }
                 }
@@ -264,7 +264,7 @@
                             //"addEventListener" in d ? d.addEventListener(c, a) : "attachEvent" in d && d.attachEvent("on" + c, a)
                             var checkevent="addEventListener" in window?"addEventListener":"attachEvent";
                             for(var i in event){
-                                console.log('adding', i, 'to', c1, 'using', checkevent);
+                                // console.log('adding', i, 'to', c1, 'using', checkevent);
                                 c1.el[checkevent](i,event[i]);
                             }
                         }
@@ -372,7 +372,7 @@
 
                var text=new createEle('text',{'text-anchor':'middle','transform':'translate(600 620)'}).text('SPIN').style({"color":"black","font-weight":"bold", "font-size":"50px"});
                g.append(text.ele(), {}, {'click': function (e) {
-                   console.log('click');
+                   // console.log('click');
                }});
                //svg top shadow
                shadow.append('path',{'d':'M600.1,90c287.9,0,521.8,231,526.4,517.8,0-2.9.1-5.8,0.1-8.6,0-290.8-235.7-526.5-526.5-526.5S73.7,308.4,73.7,599.2c0,2.9,0,5.8.1,8.6C78.4,321,312.3,90,600.1,90Z','style':{'opacity':'0.25'}});
@@ -399,7 +399,7 @@
             };
 
             this.spinToSlice = function(idx, callback) {
-                console.log('old idx', idx);
+                // console.log('old idx', idx);
                 idx = data.length + 1 - idx;
                 if (idx < 0) {
                     while (idx < 0) {
@@ -410,13 +410,13 @@
                         idx -= data.length
                     }
                 }
-                console.log('idx', idx);
+                // console.log('idx', idx);
                 var angle = 360 / data.length * idx
                 this.spin(angle, callback)
             };
 
             this.spin=function(angle, callback){
-                console.log('spin invoked with angle', angle);
+                // console.log('spin invoked with angle', angle);
                 var animation=window.requestAnimationFrame||window.webkitRequestAnimationFrame|| window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame;
                 var start = null;
                 var element = document.getElementById('mainSpin');var i=0;
@@ -456,7 +456,7 @@
 
                 animation(step);
 
-                /*
+                
                 TweenLite.set("#mainSpin", {rotation:0,transformOrigin:'600px 600px'});
                 TweenLite.to( document.getElementById('mainSpin'), 5,
                     { rotation: 1080+angle,transformOrigin:'600px 600px'
@@ -467,7 +467,7 @@
                             console.log(e.target._gsTransform.rotation );
                         },onUpdateParams:["{self}",this.rotation],
                     }
-                )*/
+                )
                 /*to( document.getElementById('mainSpin'), 3,
                     { rotation: 720,transformOrigin:'600px 600px'}
                 ).to( document.getElementById('mainSpin'), 3,
@@ -486,7 +486,7 @@
                 //     'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjcsInNob3AiOiJsdWNreS13aGVlbC1kZW1vLm15c2hvcGlmeS5jb20iLCJpYXQiOjE1MzkwOTg2MDB9.iBOQUa2MZKmv7UDEWAUy5m7i5SXTtF9qyw7jAExV4YI'
                 // },
                 success: function (res) {
-                    console.log(res);
+                    // console.log(res);
                     // var slicesFlag = false;
                     // var generatedSlices = null;
                     // for(var campaign of res.content) {
@@ -514,7 +514,7 @@
                     svgpin.draw(data);
                 },
                 error: function (err) {
-                    console.log(err);
+                    // console.log(err);
                     alertModal('Cannot get data')
                 }
             })
@@ -547,7 +547,7 @@
                     email: email
                 }),
                 success: function (res) {
-                    console.log(res);
+                    // console.log(res);
                     if (res.hasOwnProperty('discountCode') && (res.hasOwnProperty('index'))) {
                         spinToSlice(res.index, function () {
                             setTimeout(function () {
@@ -564,7 +564,7 @@
                     }
                 },
                 error: function (err) {
-                    console.log(err);
+                    // console.log(err);
                     if (err.responseJSON && err.responseJSON.message) {
                         return alertModal(err.responseJSON.message)
                     }
@@ -589,7 +589,7 @@
         }
 
         window.parent.postMessage(JSON.stringify({'msg': 'iframeInitialized'}), '*')
-        console.log('iframe here');
+        // console.log('iframe here');
         window.addEventListener('message', function (msg) {
             var d = {}
             try {
